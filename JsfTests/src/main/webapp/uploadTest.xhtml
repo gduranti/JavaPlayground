@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	xmlns:cc="http://java.sun.com/jsf/composite/components">
+
+<h:head>
+	<title>File Upload</title>
+	<h:outputStylesheet name="default.css" library="css" />
+</h:head>
+
+<h:body>
+
+	<h1>File Upload Test</h1>
+	<p:spacer height="10px" />
+
+	<h:form id="form">
+
+		<p:fileUpload 
+			fileUploadListener="#{fileUploadController.handleFileUpload}"
+			mode="advanced" dragDropSupport="true" multiple="true"
+			auto="true" process="table"
+			update="messages,table" 
+			allowTypes="/(\.|\/)(gif|jpe?g|png|txt|pdf)$/" />
+
+		<p:growl id="messages" showDetail="true" />
+
+		<p:spacer height="10px" />
+
+		<p:dataTable id="table" value="#{fileUploadController.files}" var="i">
+			
+			<p:column headerText="File Name">
+				<p:outputLabel value="#{i.file.fileName}" />
+			</p:column>
+			
+			<p:column headerText="File Size">
+				<p:outputLabel value="#{i.file.size}" />
+			</p:column>
+			
+			<p:column headerText="Obs">
+				<p:inputText value="#{i.obs}" />
+			</p:column>
+			
+			<p:column headerText="Remove">
+				<p:commandButton value="X" action="#{fileUploadController.remove(i)}" update="table" />
+			</p:column>
+		
+		</p:dataTable>
+
+	</h:form>
+
+</h:body>
+</html>
