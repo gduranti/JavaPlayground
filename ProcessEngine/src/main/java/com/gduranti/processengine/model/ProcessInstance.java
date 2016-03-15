@@ -1,14 +1,18 @@
 package com.gduranti.processengine.model;
 
-import java.util.List;
-
 public class ProcessInstance {
 
     private Long id;
-    private ProcessType processType;
-    private ProcessStatus processStatus;
-    private ProcessInstanceStep nextStep;
-    private List<ProcessInstanceStep> steps;
+    private Process process;
+    private ProcessStep nextStep;
+
+    public ProcessInstance() {
+    }
+
+    public ProcessInstance(Process process, ProcessStep nextStep) {
+        this.process = process;
+        this.nextStep = nextStep;
+    }
 
     public Long getId() {
         return id;
@@ -18,40 +22,20 @@ public class ProcessInstance {
         this.id = id;
     }
 
-    public ProcessType getProcessType() {
-        return processType;
+    public Process getProcess() {
+        return process;
     }
 
-    public void setProcessType(ProcessType processType) {
-        this.processType = processType;
+    public void setProcess(Process process) {
+        this.process = process;
     }
 
-    public ProcessInstanceStep getNextStep() {
+    public ProcessStep getNextStep() {
         return nextStep;
     }
 
-    public void setNextStep(ProcessInstanceStep nextStep) {
+    public void setNextStep(ProcessStep nextStep) {
         this.nextStep = nextStep;
-    }
-
-    public ProcessStatus getProcessStatus() {
-        return processStatus;
-    }
-
-    public void setProcessStatus(ProcessStatus processStatus) {
-        this.processStatus = processStatus;
-    }
-
-    public List<ProcessInstanceStep> getSteps() {
-        return steps;
-    }
-
-    public void setSteps(List<ProcessInstanceStep> steps) {
-        this.steps = steps;
-    }
-
-    public ProcessInstanceStep getLastStep() {
-        return steps.get(steps.size() - 1);
     }
 
 }

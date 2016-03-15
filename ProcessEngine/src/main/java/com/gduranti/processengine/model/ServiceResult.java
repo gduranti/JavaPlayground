@@ -2,11 +2,11 @@ package com.gduranti.processengine.model;
 
 public class ServiceResult {
 
-    private ProcessInstanceStep doneStep;
+    private ProcessStep doneStep;
     private ProcessStatus processStatus;
     private String argument;
 
-    public ServiceResult(ProcessInstanceStep doneStep) {
+    public ServiceResult(ProcessStep doneStep) {
         this.doneStep = doneStep;
     }
 
@@ -20,7 +20,7 @@ public class ServiceResult {
         return this;
     }
 
-    public ProcessInstanceStep getDoneStep() {
+    public ProcessStep getDoneStep() {
         return doneStep;
     }
 

@@ -1,15 +1,15 @@
 package com.gduranti.processengine;
 
-import com.gduranti.processengine.model.ProcessInstance;
+import com.gduranti.processengine.model.Process;
 
 public class ProcessRepository {
 
-    public ProcessInstance load(Long id) {
+    public Process load(Long id) {
         // TODO
         return null;
     }
 
-    public ProcessInstance save(ProcessInstance process) {
+    public Process save(Process process) {
         // TODO
         return process;
     }

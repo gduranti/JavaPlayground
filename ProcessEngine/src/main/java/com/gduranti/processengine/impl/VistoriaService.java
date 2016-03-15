@@ -1,13 +1,13 @@
 package com.gduranti.processengine.impl;
 
 import com.gduranti.processengine.Service;
-import com.gduranti.processengine.model.ProcessInstanceStep;
+import com.gduranti.processengine.model.ProcessStep;
 import com.gduranti.processengine.model.ServiceResult;
 
 public class VistoriaService implements Service<Boolean> {
 
     @Override
-    public ServiceResult execute(ProcessInstanceStep processInstanceStep, Boolean aprovado) {
+    public ServiceResult execute(ProcessStep processInstanceStep, Boolean aprovado) {
 
         System.out.println("Vistoriando....");
 

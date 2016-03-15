@@ -3,44 +3,49 @@ package com.gduranti.processengine.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gduranti.processengine.model.Process;
 import com.gduranti.processengine.model.ProcessInstance;
-import com.gduranti.processengine.model.ProcessInstanceStep;
+import com.gduranti.processengine.model.ProcessStatus;
+import com.gduranti.processengine.model.ProcessStep;
 import com.gduranti.processengine.model.ProcessType;
 import com.gduranti.processengine.model.ProcessTypeStep;
 
 public class ProcessBuilder {
 
-    public ProcessInstance buildInstance(ProcessType processType) {
-        ProcessInstance processInstance = new ProcessInstance();
-        processInstance.setProcessType(processType);
+    public Process buildProcess(ProcessType processType) {
+        Process process = new Process(processType, ProcessStatus.ABERTO);
 
-        List<ProcessInstanceStep> steps = buildInstanceSteps(processType, processInstance);
-        processInstance.setSteps(steps);
-        processInstance.setNextStep(steps.get(0));
+        List<ProcessStep> steps = buildSteps(processType, process);
+        process.setSteps(steps);
 
-        return processInstance;
+        ProcessInstance startingInstance = new ProcessInstance(process, steps.get(0));
+        process.addInstance(startingInstance);
+
+        steps.get(0).setProcessInstance(startingInstance);
+
+        return process;
     }
 
-    private List<ProcessInstanceStep> buildInstanceSteps(ProcessType processType, ProcessInstance processInstance) {
-        List<ProcessInstanceStep> instanceSteps = new ArrayList<>();
+    private List<ProcessStep> buildSteps(ProcessType processType, Process process) {
+        List<ProcessStep> processSteps = new ArrayList<>();
         for (ProcessTypeStep step : processType.getSteps()) {
-            instanceSteps.add(new ProcessInstanceStep(processInstance, step));
+            processSteps.add(new ProcessStep(process, step));
         }
-        for (ProcessInstanceStep processInstanceStep : instanceSteps) {
-            if (processInstanceStep.getProcessStep().getPrevious() != null) {
-                processInstanceStep.setPrevious(find(instanceSteps, processInstanceStep.getProcessStep().getPrevious()));
+        for (ProcessStep processStep : processSteps) {
+            if (processStep.getProcessTypeStep().getPrevious() != null) {
+                processStep.setPrevious(find(processSteps, processStep.getProcessTypeStep().getPrevious()));
             }
-            if (processInstanceStep.getProcessStep().getNext() != null) {
-                processInstanceStep.setNext(find(instanceSteps, processInstanceStep.getProcessStep().getNext()));
+            if (processStep.getProcessTypeStep().getNext() != null) {
+                processStep.setNext(find(processSteps, processStep.getProcessTypeStep().getNext()));
             }
         }
-        return instanceSteps;
+        return processSteps;
     }
 
-    private ProcessInstanceStep find(List<ProcessInstanceStep> instanceSteps, ProcessTypeStep searchStep) {
-        for (ProcessInstanceStep instanceStep : instanceSteps) {
-            if (instanceStep.getProcessStep().equals(searchStep)) {
-                return instanceStep;
+    private ProcessStep find(List<ProcessStep> processSteps, ProcessTypeStep searchStep) {
+        for (ProcessStep processStep : processSteps) {
+            if (processStep.getProcessTypeStep().equals(searchStep)) {
+                return processStep;
             }
         }
         throw new RuntimeException("Step not found: " + searchStep);
