@@ -5,8 +5,7 @@ import java.util.List;
 public class ProcessType {
 
     private Long id;
-    private String name;
-    private List<ProcessTypeStep> steps;
+    private List<ProcessTypeVersion> versions;
 
     public Long getId() {
         return id;
@@ -16,24 +15,16 @@ public class ProcessType {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public ProcessTypeVersion getCurrentVersion() {
+        return versions.get(versions.size() - 1);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public List<ProcessTypeVersion> getVersions() {
+        return versions;
     }
 
-    public List<ProcessTypeStep> getSteps() {
-        return steps;
-    }
-
-    public void setSteps(List<ProcessTypeStep> steps) {
-        this.steps = steps;
-    }
-
-    public ProcessTypeStep getInitialStep() {
-        return steps.get(0);
+    public void setVersions(List<ProcessTypeVersion> versions) {
+        this.versions = versions;
     }
 
 }

@@ -7,12 +7,12 @@ import com.gduranti.processengine.model.Process;
 import com.gduranti.processengine.model.ProcessInstance;
 import com.gduranti.processengine.model.ProcessStatus;
 import com.gduranti.processengine.model.ProcessStep;
-import com.gduranti.processengine.model.ProcessType;
-import com.gduranti.processengine.model.ProcessTypeStep;
+import com.gduranti.processengine.model.ProcessTypeVersion;
+import com.gduranti.processengine.model.ProcessStep;
 
 public class ProcessBuilder {
 
-    public Process buildProcess(ProcessType processType) {
+    public Process buildProcess(ProcessTypeVersion processType) {
         Process process = new Process(processType, ProcessStatus.ABERTO);
 
         List<ProcessStep> steps = buildSteps(processType, process);
@@ -26,9 +26,9 @@ public class ProcessBuilder {
         return process;
     }
 
-    private List<ProcessStep> buildSteps(ProcessType processType, Process process) {
+    private List<ProcessStep> buildSteps(ProcessTypeVersion processType, Process process) {
         List<ProcessStep> processSteps = new ArrayList<>();
-        for (ProcessTypeStep step : processType.getSteps()) {
+        for (ProcessStep step : processType.getSteps()) {
             processSteps.add(new ProcessStep(process, step));
         }
         for (ProcessStep processStep : processSteps) {
@@ -42,7 +42,7 @@ public class ProcessBuilder {
         return processSteps;
     }
 
-    private ProcessStep find(List<ProcessStep> processSteps, ProcessTypeStep searchStep) {
+    private ProcessStep find(List<ProcessStep> processSteps, ProcessStep searchStep) {
         for (ProcessStep processStep : processSteps) {
             if (processStep.getProcessTypeStep().equals(searchStep)) {
                 return processStep;

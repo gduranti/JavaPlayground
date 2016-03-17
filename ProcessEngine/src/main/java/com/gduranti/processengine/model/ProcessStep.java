@@ -1,48 +1,55 @@
 package com.gduranti.processengine.model;
 
-public class ProcessStep extends Step<ProcessStep> {
+import java.util.List;
 
-    private Process process;
-    private ProcessInstance processInstance;
-    private ProcessTypeStep processTypeStep;
+public class ProcessStep {
 
-    public ProcessStep() {
+    private Long id;
+    private ProcessTypeVersion processType;
+
+    private ServiceType serviceType;
+    private Integer order;
+
+    private List<Connection> connections;
+
+    public Long getId() {
+        return id;
     }
 
-    public ProcessStep(Process process, ProcessTypeStep processTypeStep) {
-        this.process = process;
-        this.processTypeStep = processTypeStep;
-        setServiceType(processTypeStep.getServiceType());
-        setOrder(processTypeStep.getOrder());
-        setCondition(processTypeStep.getCondition());
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public Process getProcess() {
-        return process;
+    public ProcessTypeVersion getProcessType() {
+        return processType;
     }
 
-    public void setProcess(Process process) {
-        this.process = process;
+    public void setProcessType(ProcessTypeVersion processType) {
+        this.processType = processType;
     }
 
-    public ProcessInstance getProcessInstance() {
-        return processInstance;
+    public ServiceType getServiceType() {
+        return serviceType;
     }
 
-    public void setProcessInstance(ProcessInstance processInstance) {
-        this.processInstance = processInstance;
+    public void setServiceType(ServiceType serviceType) {
+        this.serviceType = serviceType;
     }
 
-    public ProcessTypeStep getProcessTypeStep() {
-        return processTypeStep;
+    public Integer getOrder() {
+        return order;
     }
 
-    public void setProcessTypeStep(ProcessTypeStep processTypeStep) {
-        this.processTypeStep = processTypeStep;
+    public void setOrder(Integer order) {
+        this.order = order;
     }
 
-    public boolean matchCondition(String argument) {
-        return getCondition() == null || getCondition().equals(argument);
+    public List<Connection> getConnections() {
+        return connections;
+    }
+
+    public void setConnections(List<Connection> connections) {
+        this.connections = connections;
     }
 
 }
