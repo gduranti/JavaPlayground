@@ -8,9 +8,10 @@ public class ProcessStep {
     private ProcessTypeVersion processType;
 
     private ServiceType serviceType;
-    private Integer order;
+    private Integer index;
 
-    private List<Connection> connections;
+    private List<Connection> incomingConnections;
+    private List<Connection> outgoingConnections;
 
     public Long getId() {
         return id;
@@ -36,20 +37,33 @@ public class ProcessStep {
         this.serviceType = serviceType;
     }
 
-    public Integer getOrder() {
-        return order;
+    public Integer getIndex() {
+        return index;
     }
 
-    public void setOrder(Integer order) {
-        this.order = order;
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 
-    public List<Connection> getConnections() {
-        return connections;
+    public List<Connection> getIncomingConnections() {
+        return incomingConnections;
     }
 
-    public void setConnections(List<Connection> connections) {
-        this.connections = connections;
+    public void setIncomingConnections(List<Connection> incomingConnections) {
+        this.incomingConnections = incomingConnections;
+    }
+
+    public List<Connection> getOutgoingConnections() {
+        return outgoingConnections;
+    }
+
+    public void setOutgoingConnections(List<Connection> outgoingConnections) {
+        this.outgoingConnections = outgoingConnections;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[ProcessStep #%s: %s of process %s]", id, serviceType.getName(), processType);
     }
 
 }

@@ -30,4 +30,8 @@ public class Connection {
         this.condition = condition;
     }
 
+    public boolean matchCondition(String argument) {
+        return (condition == argument) || (condition != null && condition.equals(argument));
+    }
+
 }

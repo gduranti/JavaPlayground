@@ -1,10 +1,10 @@
 package com.gduranti.processengine;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.gduranti.processengine.model.Process;
 import com.gduranti.processengine.model.ProcessInstance;
-import com.gduranti.processengine.model.ProcessStep;
 import com.gduranti.processengine.model.ServiceResult;
 
 public class ServiceExecutor {
@@ -18,16 +18,19 @@ public class ServiceExecutor {
     @Inject
     private ProcessRepository repository;
 
-    public <T> ProcessInstance executeService(ProcessStep processStep, T payload) {
-        Service<T> service = serviceFactory.createService(processStep.getServiceType());
-        ServiceResult result = service.execute(processStep, payload);
+    @Inject
+    private Event<ServiceResult> event;
 
-        ProcessInstance processInstance = result.getProcessInstance();
+    public <T> ProcessInstance executeService(ProcessInstance processInstance, T payload) {
+        Service<T> service = serviceFactory.createService(processInstance.getNextStep().getServiceType());
+        ServiceResult result = service.execute(processInstance, payload);
 
         Process process = processInstance.getProcess();
         process.setStatus(result.getProcessStatus());
 
         decisionHandler.handleNextSteps(result);
+
+        event.fire(result);
 
         repository.save(process);
         return processInstance;

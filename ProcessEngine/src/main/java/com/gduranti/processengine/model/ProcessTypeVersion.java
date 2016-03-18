@@ -49,4 +49,10 @@ public class ProcessTypeVersion {
     public ProcessStep getLastStep() {
         return getSteps().get(steps.size() - 1);
     }
+
+    @Override
+    public String toString() {
+        return String.format("%sv%s", processType.getId(), version);
+    }
+
 }

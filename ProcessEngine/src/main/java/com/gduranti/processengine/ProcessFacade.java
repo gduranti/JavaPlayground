@@ -4,8 +4,7 @@ import javax.inject.Inject;
 
 import com.gduranti.processengine.model.Process;
 import com.gduranti.processengine.model.ProcessInstance;
-import com.gduranti.processengine.model.ProcessStep;
-import com.gduranti.processengine.model.ProcessTypeVersion;
+import com.gduranti.processengine.model.ProcessType;
 import com.gduranti.processengine.util.ProcessBuilder;
 
 public class ProcessFacade {
@@ -19,13 +18,13 @@ public class ProcessFacade {
     @Inject
     private ProcessRepository repository;
 
-    public <T> ProcessInstance openProcess(ProcessTypeVersion processType, T payload) {
+    public <T> ProcessInstance openProcess(ProcessType processType, T payload) {
         Process process = processBuilder.buildProcess(processType);
-        return serviceExecutor.executeService(process.getInitialStep(), payload);
+        return serviceExecutor.executeService(process.getInstances().get(0), payload);
     }
 
-    public <T> ProcessInstance executeService(ProcessStep processStep, T payload) {
-        return serviceExecutor.executeService(processStep, payload);
+    public <T> ProcessInstance executeService(ProcessInstance processInstance, T payload) {
+        return serviceExecutor.executeService(processInstance, payload);
     }
 
     public Process load(Long id) {
