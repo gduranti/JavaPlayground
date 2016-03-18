@@ -13,9 +13,9 @@ public class VistoriaService implements Service<Boolean> {
 
         ServiceResult result = new ServiceResult(processInstance);
         if (aprovado) {
-            return result.withArgument("Aprovado");
+            return result.withArgument("Aprovada");
         } else {
-            return result.withArgument("Reprovado");
+            return result.withArgument("Reprovada");
         }
     }
 

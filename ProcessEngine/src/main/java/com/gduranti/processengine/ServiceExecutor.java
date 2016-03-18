@@ -26,7 +26,9 @@ public class ServiceExecutor {
         ServiceResult result = service.execute(processInstance, payload);
 
         Process process = processInstance.getProcess();
-        process.setStatus(result.getProcessStatus());
+        if (result.getProcessStatus() != null) {
+            process.setStatus(result.getProcessStatus());
+        }
 
         decisionHandler.handleNextSteps(result);
 

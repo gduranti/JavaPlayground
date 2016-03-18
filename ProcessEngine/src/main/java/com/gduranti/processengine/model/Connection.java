@@ -6,6 +6,15 @@ public class Connection {
     private ProcessStep to;
     private String condition;
 
+    public Connection() {
+    }
+
+    public Connection(ProcessStep from, ProcessStep to, String condition) {
+        this.from = from;
+        this.to = to;
+        this.condition = condition;
+    }
+
     public ProcessStep getFrom() {
         return from;
     }

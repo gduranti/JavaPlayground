@@ -2,6 +2,7 @@ package com.gduranti.processengine;
 
 import java.util.Set;
 
+import javax.enterprise.context.spi.CreationalContext;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
@@ -22,7 +23,10 @@ public class ServiceFactory {
         if (beans.size() > 1) {
             throw new IllegalArgumentException("Multiple beans found for: " + serviceType.getServiceClass());
         }
-        return (Service<T>) beans.iterator().next();
+
+        Bean<Service<T>> bean = (Bean<Service<T>>) beanManager.resolve(beans);
+        CreationalContext<Service<T>> creationalContext = beanManager.createCreationalContext(bean);
+        return beanManager.getContext(bean.getScope()).get(bean, creationalContext);
     }
 
 }

@@ -10,6 +10,14 @@ public class ProcessTypeVersion {
     private String name;
     private List<ProcessStep> steps;
 
+    public ProcessTypeVersion() {
+    }
+
+    public ProcessTypeVersion(ProcessType processType, int version) {
+        this.processType = processType;
+        this.version = version;
+    }
+
     public ProcessType getProcessType() {
         return processType;
     }

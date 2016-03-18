@@ -7,9 +7,9 @@ import com.gduranti.processengine.impl.VistoriaService;
 
 public enum ServiceType {
 
-    ABERTURA     (1, "Abertura de Processo",     AberturaProcessoService.class),
-    VISTORIA     (2, "Vistoria",                 VistoriaService.class),
-    ENCERRAMENTO (3, "Encerramento de Processo", EncerramentoProcessoService.class), ;
+    ABERTURA     (11, "Abertura de Processo",     AberturaProcessoService.class),
+    VISTORIA     (12, "Vistoria",                 VistoriaService.class),
+    ENCERRAMENTO (13, "Encerramento de Processo", EncerramentoProcessoService.class), ;
 
     private final int id;
     private final String name;
