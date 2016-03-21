@@ -3,8 +3,13 @@ package com.gduranti.processengine.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Process {
 
+    @Id
     private Long id;
     private ProcessTypeVersion type;
     private ProcessStatus status;
@@ -44,6 +49,24 @@ public class Process {
 
     public List<ProcessInstance> getInstances() {
         return instances != null ? instances : (instances = new ArrayList<>());
+    }
+
+    public List<ProcessInstance> getActiveInstances() {
+        return getActiveInstances(true);
+    }
+
+    public List<ProcessInstance> getInactiveInstances() {
+        return getActiveInstances(false);
+    }
+
+    private List<ProcessInstance> getActiveInstances(boolean active) {
+        List<ProcessInstance> activeInstances = new ArrayList<>();
+        for (ProcessInstance instance : instances) {
+            if (instance.isActive() == active) {
+                activeInstances.add(instance);
+            }
+        }
+        return activeInstances;
     }
 
     public void setInstances(List<ProcessInstance> instances) {

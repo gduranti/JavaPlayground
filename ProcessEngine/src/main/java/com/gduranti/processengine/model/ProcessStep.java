@@ -63,10 +63,6 @@ public class ProcessStep {
         this.incomingConnections = incomingConnections;
     }
 
-    public void addIncomingConnection(ProcessStep step, String condition) {
-        getIncomingConnections().add(new Connection(this, step, condition));
-    }
-
     public List<Connection> getOutgoingConnections() {
         return outgoingConnections != null ? outgoingConnections : (outgoingConnections = new ArrayList<>());
     }
@@ -79,8 +75,11 @@ public class ProcessStep {
         connectTo(step, null);
     }
 
-    public void connectTo(ProcessStep step, String condition) {
-        getOutgoingConnections().add(new Connection(this, step, condition));
+    public ProcessStep connectTo(ProcessStep nextStep, String condition) {
+        Connection connection = new Connection(this, nextStep, condition);
+        this.getOutgoingConnections().add(connection);
+        nextStep.getIncomingConnections().add(connection);
+        return nextStep;
     }
 
     @Override

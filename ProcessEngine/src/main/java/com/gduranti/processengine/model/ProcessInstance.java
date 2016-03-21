@@ -1,10 +1,19 @@
 package com.gduranti.processengine.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Version;
+
+@Entity
 public class ProcessInstance {
 
+    @Id
     private Long id;
     private Process process;
     private ProcessStep nextStep;
+
+    @Version
+    private Long version;
 
     public ProcessInstance() {
     }
@@ -36,6 +45,10 @@ public class ProcessInstance {
 
     public void setNextStep(ProcessStep nextStep) {
         this.nextStep = nextStep;
+    }
+
+    public boolean isActive() {
+        return nextStep != null;
     }
 
 }

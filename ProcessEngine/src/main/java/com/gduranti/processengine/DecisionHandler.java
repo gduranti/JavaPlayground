@@ -1,6 +1,7 @@
 package com.gduranti.processengine;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.gduranti.processengine.model.Connection;
@@ -15,6 +16,7 @@ public class DecisionHandler {
     public void handleNextSteps(ServiceResult doneResult) {
         List<ProcessStep> nextSteps = findNextSteps(doneResult);
         validate(nextSteps, doneResult.getDoneStep());
+        filterParallelism(nextSteps, doneResult);
         configureNextSteps(doneResult.getProcessInstance(), nextSteps);
     }
 
@@ -34,6 +36,20 @@ public class DecisionHandler {
         }
     }
 
+    private void filterParallelism(List<ProcessStep> nextSteps, ServiceResult doneResult) {
+
+        for (Iterator<ProcessStep> iterator = nextSteps.iterator(); iterator.hasNext();) {
+            ProcessStep processStep = iterator.next();
+
+            for (Connection incomingConnection : processStep.getIncomingConnections()) {
+                if (!incomingConnection.getFrom().equals(doneResult.getDoneStep()) && existsActiveInstanceFor(incomingConnection.getFrom(), doneResult)) {
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
+    }
+
     private void configureNextSteps(ProcessInstance processInstance, List<ProcessStep> nextSteps) {
 
         if (nextSteps.size() == 1) {
@@ -49,5 +65,14 @@ public class DecisionHandler {
                 }
             }
         }
+    }
+
+    private boolean existsActiveInstanceFor(ProcessStep incomingConnectionForNextStep, ServiceResult doneResult) {
+        for (ProcessInstance instance : doneResult.getProcessInstance().getProcess().getActiveInstances()) {
+            if (instance.getNextStep().equals(incomingConnectionForNextStep)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

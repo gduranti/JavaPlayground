@@ -26,15 +26,17 @@ public class ServiceExecutor {
         ServiceResult result = service.execute(processInstance, payload);
 
         Process process = processInstance.getProcess();
+
+        // repository.refresh(process);
         if (result.getProcessStatus() != null) {
             process.setStatus(result.getProcessStatus());
         }
 
         decisionHandler.handleNextSteps(result);
+        repository.save(process);
 
         event.fire(result);
 
-        repository.save(process);
         return processInstance;
     }
 
