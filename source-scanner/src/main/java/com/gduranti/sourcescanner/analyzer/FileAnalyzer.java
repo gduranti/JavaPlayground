@@ -2,6 +2,7 @@ package com.gduranti.sourcescanner.analyzer;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,6 @@ public class FileAnalyzer {
         this.properties = properties;
     }
 
-    @SuppressWarnings("unchecked")
     public AnalyzedFile analyzeFile(File file) {
 
         AnalyzedFile analyzedFile = new AnalyzedFile(file.getName(), file.getPath());
@@ -30,15 +30,13 @@ public class FileAnalyzer {
         List<SourceLine> matchingLines = new ArrayList<>();
 
         try {
-            List<String> lines = IOUtils.readLines(new FileInputStream(file));
+            List<SourceLine> lines = readLines(file);
 
-            for (int lineIndex = 0; lineIndex < lines.size(); lineIndex++) {
-                String line = lines.get(lineIndex);
-                SourceLine sourceLine = new SourceLine(lineIndex, line);
-                if (!properties.ignoreComments || !isComment(sourceLine)) {
-                    boolean shouldAdd = analyzeLine(sourceLine, lines);
+            for (SourceLine line : lines) {
+                if (!properties.ignoreComments || !isComment(line)) {
+                    boolean shouldAdd = analyzeLine(line, lines);
                     if (shouldAdd) {
-                        matchingLines.add(sourceLine);
+                        matchingLines.add(line);
                     }
                 }
             }
@@ -51,7 +49,18 @@ public class FileAnalyzer {
         return null;
     }
 
-    private boolean analyzeLine(SourceLine sourceLine, List<String> lines) {
+    @SuppressWarnings("unchecked")
+    private List<SourceLine> readLines(File file) throws IOException, FileNotFoundException {
+        List<String> lines = IOUtils.readLines(new FileInputStream(file));
+        List<SourceLine> sourceLines = new ArrayList<>();
+        for (int lineIndex = 0; lineIndex < lines.size(); lineIndex++) {
+            String line = lines.get(lineIndex);
+            sourceLines.add(new SourceLine(lineIndex, line));
+        }
+        return sourceLines;
+    }
+
+    private boolean analyzeLine(SourceLine sourceLine, List<SourceLine> lines) {
 
         for (String expression : properties.expressions) {
             Matcher m = Pattern.compile(expression).matcher(sourceLine.getContent());
@@ -63,7 +72,7 @@ public class FileAnalyzer {
         boolean shouldAdd = false;
         if (sourceLine.hasMatches() || workingCommand != null) {
             if (workingCommand == null && !isComment(sourceLine)) {
-                workingCommand = identifyCommand(sourceLine.getContent(), lines);
+                workingCommand = identifyCommand(sourceLine, lines);
             }
             shouldAdd = true;
         }
@@ -75,12 +84,14 @@ public class FileAnalyzer {
         return shouldAdd;
     }
 
-    private Command identifyCommand(String content, List<String> lines) {
+    private Command identifyCommand(SourceLine sourceLine, List<SourceLine> allLines) {
         for (Command command : properties.language.getCommands()) {
-            if (content.contains(command.getName())) {
+            if (sourceLine.getContent().contains(command.getName())) {
                 return command;
             }
         }
+
+        // int TODO aqui
 
         return null;
     }
