@@ -8,18 +8,18 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class SourceLine {
 
-    private final Integer lineNumber;
+    private final Integer lineIndex;
     private final String content;
     private final List<Pair<Integer, Integer>> matchingExpressions;
 
-    public SourceLine(Integer lineNumber, String content) {
-        this.lineNumber = lineNumber;
+    public SourceLine(Integer lineIndex, String content) {
+        this.lineIndex = lineIndex;
         this.content = content;
         this.matchingExpressions = new ArrayList<>();
     }
 
-    public Integer getLineNumber() {
-        return lineNumber;
+    public Integer getLineIndex() {
+        return lineIndex;
     }
 
     public String getContent() {
@@ -36,6 +36,11 @@ public class SourceLine {
 
     public boolean hasMatches() {
         return !matchingExpressions.isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        return "SouceLine #" + lineIndex + " matches: " + hasMatches();
     }
 
 }

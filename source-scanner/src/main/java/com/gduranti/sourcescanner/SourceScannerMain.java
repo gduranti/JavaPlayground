@@ -11,16 +11,15 @@ public class SourceScannerMain {
     public static void main(String[] args) {
 
         SourceScanner scanner = SourceScannerBuilder.forLanguage(COBOL)
-                .finding("KVIN81*", "K81-*")
-                .withLineLimit(15)
+                .finding("tabela-tal*", "K000")
+                .withLineLimit(3)
                 .consideringComments()
                 .build();
 
-        ScannerReport report = scanner.analyze("C:\\Java\\Projetos\\IED\\trunk\\FontesUnisys\\sistemas\\VIN\\731");
+        ScannerReport report = scanner.analyze("C:\\caminho......");
 
         ReportExporter reporterExporter = ReportExporterFactory.create("console");
-        reporterExporter.export(report, "C:\\Java\\git\\JavaPlayground\\source-scanner\\src\\test\\resources");
-
+        reporterExporter.export(report, "C:\\caminhho.............");
     }
 
 }
