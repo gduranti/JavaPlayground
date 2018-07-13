@@ -27,21 +27,28 @@ public class Main {
     private static List<String> buildFileList() {
         List<String> files = new ArrayList<>();
 
-        for (int i = 0; i < 2100; i++) {
+        for (int i = 0; i < 1000; i++) {
             files.add(StringUtils.leftPad(Integer.toString(i), 3, "0"));
         }
 
-        files.add("outro-arquivo");
-        files.add("outro-arquivo2");
+        files.add("2000");
+        files.add("2001");
+        files.add("2002");
+        files.add("2003");
+        files.add("2004");
+        files.add("2005");
+        files.add("2006");
+        files.add("2999");
+        files.add("DASDLSYMBOL");
         return files;
     }
 
     private static void downloadFile(String arquivo) throws MalformedURLException, IOException, FileNotFoundException {
         
         try {
-            URL url = new URL("http://url.../" + arquivo);
+            URL url = new URL("http://siwdes0873.procergs.reders:8181/source/download/1_UNISYS/VIN/" + arquivo);
 
-            File file = new File("C:\\caminho.....\\" + arquivo + ".cbl");
+            File file = new File("C:\\Java\\Projetos\\VIN\\FontesUnisys\\" + arquivo + ".cbl");
             if (file.exists()) {
                 file.delete();
             }

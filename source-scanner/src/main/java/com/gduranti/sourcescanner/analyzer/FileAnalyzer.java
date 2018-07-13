@@ -22,12 +22,13 @@ public class FileAnalyzer {
     }
 
     public AnalyzedFile analyzeFile(File file) {
+        System.out.println("Analyzing file " + file.getName());
 
         AnalyzedFile analyzedFile = new AnalyzedFile(file.getName(), file.getPath());
 
         List<SourceLine> fileLines = readLines(file);
         List<SourceLine> matchingLines = findMatchingLines(fileLines);
-        List<LineInterval> intervals = lineIntervalsBuilder.buildIntervals(matchingLines);
+        List<LineInterval> intervals = lineIntervalsBuilder.buildIntervals(matchingLines, fileLines.size());
 
         loadFragments(analyzedFile, fileLines, intervals);
 
@@ -67,9 +68,9 @@ public class FileAnalyzer {
 
     private boolean analyzeLine(SourceLine sourceLine, List<SourceLine> lines) {
         for (String expression : properties.expressions) {
-            Matcher m = Pattern.compile(".*" + expression + ".*").matcher(sourceLine.getContent());
+            Matcher m = Pattern.compile(".*(" + expression + ").*").matcher(sourceLine.getContent());
             if (m.matches()) {
-                sourceLine.matchesAt(m.start(), m.end());
+                sourceLine.matchesAt(m.start(1), m.end(1));
             }
         }
         return sourceLine.hasMatches();

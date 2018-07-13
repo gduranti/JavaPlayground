@@ -5,13 +5,7 @@ public class LineInterval implements Comparable<LineInterval> {
     private int initialLine;
     private int finalLine;
 
-    public static LineInterval withLimit(Integer lineIndex, int lineLimit) {
-        int initialLine = lineIndex - lineLimit;
-        int finalLine = lineIndex + lineLimit;
-        return new LineInterval(initialLine, finalLine);
-    }
-
-    private LineInterval(int initialLine, int finalLine) {
+    public LineInterval(int initialLine, int finalLine) {
         this.initialLine = initialLine;
         this.finalLine = finalLine;
     }

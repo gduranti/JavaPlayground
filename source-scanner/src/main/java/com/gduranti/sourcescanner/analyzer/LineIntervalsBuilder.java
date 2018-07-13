@@ -12,15 +12,21 @@ public class LineIntervalsBuilder {
         this.lineLimit = lineLimit;
     }
 
-    public List<LineInterval> buildIntervals(List<SourceLine> matchingLines) {
-
+    public List<LineInterval> buildIntervals(List<SourceLine> matchingLines, int fileLineCount) {
+        
         List<LineInterval> intervals = matchingLines.stream()
-                                                    .map(x -> LineInterval.withLimit(x.getLineIndex(), lineLimit))
+                                                    .map(x -> buildInterval(x, fileLineCount))
                                                     .sorted()
                                                     .collect(Collectors.toList());
         mergeIntervals(intervals);
 
         return intervals;
+    }
+
+    private LineInterval buildInterval(SourceLine sourceLine, int fileLineCount) {
+        int initialLine = Math.max(sourceLine.getLineIndex() - lineLimit, 0);
+        int finalLine = Math.min(sourceLine.getLineIndex() + lineLimit, fileLineCount - 1);
+        return new LineInterval(initialLine, finalLine);
     }
 
     private void mergeIntervals(List<LineInterval> intervals) {

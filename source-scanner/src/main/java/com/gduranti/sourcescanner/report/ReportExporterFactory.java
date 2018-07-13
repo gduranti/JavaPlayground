@@ -10,9 +10,9 @@ public class ReportExporterFactory {
 
         switch (reportType.toLowerCase()) {
             case "console": return new ConsoleReportExporter();
+            case "xls"    : return new XlsReportExporter();
             // case "txt" : return new TxtReportExporter();
             // case "pdf" : return new PdfReportExporter();
-            // case "odt" : return new OdtReportExporter();
             default       : throw new RuntimeException("Report exporter not found.");
         }
     }
