@@ -1,6 +1,7 @@
 package com.gduranti.sqlperiodselector;
 
 import com.gduranti.sqlperiodselector.column.ColumnType;
+import com.gduranti.sqlperiodselector.period.DateType;
 import com.gduranti.sqlperiodselector.period.PeriodIterator;
 import com.gduranti.sqlperiodselector.period.PeriodIteratorBuilder;
 import com.gduranti.sqlperiodselector.period.SelectStrategy;
@@ -23,7 +24,7 @@ public class MainExample {
                 .configColumn("total", ColumnType.COUNT);
 
         SqlProcessor sqlProcessor = new SqlProcessor(VeiSecurityFactory.createForDesenvolvimento());
-        Report report = sqlProcessor.execute(buildQuery(), periodIterator, reportAcumulator);
+        Report report = sqlProcessor.execute(buildQuery(), periodIterator, reportAcumulator, DateType.SAMD);
 
         report.print();
     }

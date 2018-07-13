@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.format.DateTimeFormatter;
 import java.util.Iterator;
 
-import com.gduranti.sqlperiodselector.connection.BDConnector;
 import com.gduranti.sqlperiodselector.connection.ConnectionProperties;
-import com.gduranti.sqlperiodselector.period.DateType;
+import com.gduranti.sqlperiodselector.connection.BDConnector;
+import com.gduranti.sqlperiodselector.period.DateTimeFormatterFactory;
 import com.gduranti.sqlperiodselector.period.Period;
 import com.gduranti.sqlperiodselector.report.Report;
 import com.gduranti.sqlperiodselector.report.ReportAcumulator;
@@ -24,13 +25,9 @@ public class SqlProcessor {
     }
 
     public Report execute(String query, Iterator<Period> periods, ReportAcumulator reportAcumulator) throws Exception {
-        return execute(query, periods, reportAcumulator, DateType.SAMD);
-    }
-
-    public Report execute(String query, Iterator<Period> periods, ReportAcumulator reportAcumulator, DateType dateType) throws Exception {
         try {
             initConnection(query);
-            periods.forEachRemaining(p -> process(p, reportAcumulator, dateType));
+            periods.forEachRemaining(p -> process(p, reportAcumulator));
             return reportAcumulator.buildReport();
         } finally {
             close(preparedStatement);
@@ -49,10 +46,14 @@ public class SqlProcessor {
         }
     }
 
-    private void process(Period period, ReportAcumulator reportAcumulator, DateType dateType) {
+    private void process(Period period, ReportAcumulator reportAcumulator) {
+
         System.out.println("Processing period " + period.toString());
+
         try {
-            dateType.addParameters(preparedStatement, period);
+            DateTimeFormatter samdFormatter = DateTimeFormatterFactory.createSamdFormatter();
+            preparedStatement.setInt(1, new Integer(period.getStart().format(samdFormatter)));
+            preparedStatement.setInt(2, new Integer(period.getEnd().format(samdFormatter)));
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 reportAcumulator.addResult(resultSet);
