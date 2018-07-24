@@ -1,5 +1,6 @@
 package com.gduranti.sqlperiodselector.period;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
 
@@ -13,6 +14,28 @@ public enum SelectStrategy {
         public Period nextAfter(Period period, LocalDate finalLimit) {
             LocalDate nextDay = period.getEnd().plusDays(1);
             return new DayToDayPeriod(nextDay, nextDay);
+        }
+    },
+
+    WEEK {
+        public Period setup(LocalDate start, LocalDate finalLimit) {
+            LocalDate end = start.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+            if (end.isAfter(finalLimit)) {
+                end = finalLimit;
+            }
+            return new DayToDayPeriod(start, end);
+        }
+
+        public Period nextAfter(Period period, LocalDate finalLimit) {
+            LocalDate nextWeek = period.getStart().plusWeeks(1);
+            LocalDate start = nextWeek.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+            LocalDate end = nextWeek.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+            if (end.isAfter(finalLimit)) {
+                end = finalLimit;
+            }
+
+            return new DayToDayPeriod(start, end);
         }
     },
 

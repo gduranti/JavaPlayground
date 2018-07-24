@@ -1,8 +1,9 @@
 package com.gduranti.sqlperiodselector.period;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public enum DateType {
@@ -19,8 +20,8 @@ public enum DateType {
     DATE {
         @Override
         public void addParameters(PreparedStatement preparedStatement, Period period) throws SQLException {
-            preparedStatement.setDate(1, Date.valueOf(period.getStart()));
-            preparedStatement.setDate(2, Date.valueOf(period.getEnd()));
+            preparedStatement.setTimestamp(1, Timestamp.valueOf(period.getStart().atStartOfDay()));
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(period.getEnd().atTime(LocalTime.MAX)));
         }
     };
 
