@@ -9,6 +9,7 @@ public class ConsoleExporter implements ReportExporter {
     @Override
     public void export(Report report, File file) {
         System.out.println("\n\n-------------\n Report \n-------------\n");
+        System.out.println("\nProcessing Time: " + report.getProcessingTime().getSeconds() + " seconds \n\n");
         System.out.println(buildStringReport(report));
     }
 

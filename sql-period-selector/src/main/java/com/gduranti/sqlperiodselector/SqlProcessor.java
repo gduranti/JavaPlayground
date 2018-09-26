@@ -12,6 +12,7 @@ import com.gduranti.sqlperiodselector.period.DateType;
 import com.gduranti.sqlperiodselector.period.Period;
 import com.gduranti.sqlperiodselector.report.Report;
 import com.gduranti.sqlperiodselector.report.ReportAcumulator;
+import com.gduranti.sqlperiodselector.util.Stopwatch;
 
 public class SqlProcessor {
 
@@ -29,9 +30,12 @@ public class SqlProcessor {
 
     public Report execute(String query, Iterator<Period> periods, ReportAcumulator reportAcumulator, DateType dateType) throws Exception {
         try {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.start();
             initConnection(query);
             periods.forEachRemaining(p -> process(p, reportAcumulator, dateType));
-            return reportAcumulator.buildReport();
+            stopwatch.stop();
+            return reportAcumulator.buildReport(stopwatch.get());
         } finally {
             close(preparedStatement);
             close(connection);

@@ -1,6 +1,7 @@
 package com.gduranti.sqlperiodselector.report;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,12 +10,17 @@ import com.gduranti.sqlperiodselector.report.exporter.ReportExporter;
 
 public class Report {
 
+    private Duration processingTime;
     private final List<String> headers;
     private final List<ReportRow> rows;
 
     public Report() {
         this.headers = new ArrayList<>();
         this.rows = new ArrayList<>();
+    }
+
+    public void addProcessingTime(Duration processingTime) {
+        this.processingTime = processingTime;
     }
 
     public void addHeader(String header) {
@@ -31,6 +37,10 @@ public class Report {
 
     public List<ReportRow> getRows() {
         return rows;
+    }
+
+    public Duration getProcessingTime() {
+        return processingTime;
     }
 
     public void print() {

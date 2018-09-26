@@ -2,6 +2,7 @@ package com.gduranti.sqlperiodselector.report;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,8 +87,9 @@ public class ReportAcumulator {
                 .collect(Collectors.toList());
     }
 
-    public Report buildReport() {
+    public Report buildReport(Duration processingTime) {
         Report report = new Report();
+        report.addProcessingTime(processingTime);
         columnsConfig.stream().forEach(c -> report.addHeader(c.getAlias()));
         resultMap.entrySet().stream().forEach(e -> report.addRow(new ReportRow(e.getKey(), e.getValue())));
         return report;
