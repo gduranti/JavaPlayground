@@ -13,8 +13,8 @@ public class Picture {
     private int width;
     private int height;
 
-    public Picture(String name) throws IOException {
-        this.buf = ImageIO.read(new File(name));
+    public Picture(File file) throws IOException {
+        this.buf = ImageIO.read(file);
         this.width = buf.getWidth();
         this.height = buf.getHeight();
     }
