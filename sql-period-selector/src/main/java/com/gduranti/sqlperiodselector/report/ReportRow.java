@@ -16,8 +16,12 @@ public class ReportRow implements Comparable<ReportRow> {
 
     @Override
     public String toString() {
+        return toString(",");
+    }
+
+    public String toString(String separator) {
         StringBuilder builder = new StringBuilder();
-        values.stream().forEach(v -> builder.append(v.getValue()).append(","));
+        values.stream().forEach(v -> builder.append(v.getValue()).append(separator));
         return builder.toString();
     }
 

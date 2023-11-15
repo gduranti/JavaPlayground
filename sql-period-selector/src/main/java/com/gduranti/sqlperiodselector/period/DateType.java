@@ -12,8 +12,13 @@ public enum DateType {
         @Override
         public void addParameters(PreparedStatement preparedStatement, Period period) throws NumberFormatException, SQLException {
             DateTimeFormatter samdFormatter = DateTimeFormatterFactory.createSamdFormatter();
+
             preparedStatement.setInt(1, new Integer(period.getStart().format(samdFormatter)));
             preparedStatement.setInt(2, new Integer(period.getEnd().format(samdFormatter)));
+
+            preparedStatement.setInt(3, new Integer(period.getStart().format(samdFormatter)));
+            preparedStatement.setInt(4, new Integer(period.getEnd().format(samdFormatter)));
+
         }
     },
 
