@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gduranti.pixelreplacer.util.ColorConverter;
+
 public class PixelReplacer {
 
     private class RGB {
@@ -30,6 +32,11 @@ public class PixelReplacer {
     }
 
     private Map<RGB, Color> colorMap = new HashMap<>();
+
+    public PixelReplacer mapColor(String originalHexColor, String newHexColor) {
+        ColorConverter colorConverter = new ColorConverter();
+        return mapColor(colorConverter.converteRGB(originalHexColor), colorConverter.converteRGB(newHexColor));
+    }
 
     public PixelReplacer mapColor(Color originalColor, Color newColor) {
         colorMap.put(new RGB(originalColor), newColor);

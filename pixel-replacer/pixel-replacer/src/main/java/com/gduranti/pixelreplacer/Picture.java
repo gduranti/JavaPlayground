@@ -2,8 +2,11 @@ package com.gduranti.pixelreplacer;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
@@ -39,6 +42,12 @@ public class Picture {
 
     public void setColor(int col, int row, Color color) {
         buf.setRGB(col, row, color.getRGB());
+    }
+
+    public InputStream toInputStream() throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(buf, "png", os);
+        return new ByteArrayInputStream(os.toByteArray());
     }
 
     public File save(String destPath) throws IOException {

@@ -1,49 +1,45 @@
 package com.gduranti.pixelreplacer;
 
-import java.awt.Color;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Random;
+import java.util.logging.Logger;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.codec.PngImage;
+import com.gduranti.pixelreplacer.util.PdfBuilder;
 
 public class Main {
 
+    private static Logger LOGGER = Logger.getAnonymousLogger();
+
     public static void main(String... args) throws Exception {
 
+        System.setProperty("java.util.logging.SimpleFormatter.format", "[%1$tF %1$tT] [%4$-7s] %5$s %n");
+
+        if (args.length != 5) {
+            throw new RuntimeException("Invalid args.");
+        }
+
+        String sourceImagePath = args[0];
+        String targetPdfPath = args[1];
+        String originalColor = args[2];
+        String newColor = args[3];
+        boolean autoOpenPdf = Boolean.parseBoolean(args[4]);
+
+        logArgs(sourceImagePath, targetPdfPath, originalColor, newColor);
+
         PixelReplacer pixelReplacer = new PixelReplacer();
-        
-        Picture newPicture = pixelReplacer.mapColor(new Color(153, 180, 209), Color.BLACK)
-                                          .replace(new File("C:\\Users\\gabriel-duranti\\Desktop\\pont.png"));
+        Picture newPicture = pixelReplacer.mapColor(originalColor, newColor).replace(new File(sourceImagePath));
 
-        String destPath = "C:\\temp\\" + new Random().nextInt() + ".png";
-        File tempFile = newPicture.save(destPath);
+        PdfBuilder pdfBuilder = new PdfBuilder();
+        pdfBuilder.buildPdf(newPicture, targetPdfPath, autoOpenPdf);
 
-        buildPdf(destPath);
-
-        // Desktop.getDesktop().open(tempFile);
-
-        System.out.println("Concluído");
+        LOGGER.info("Concluído");
     }
 
-    private static void buildPdf(String destPath) throws Exception {
-
-        Document document = new Document();
-        document.setPageSize(PageSize.A4.rotate());
-
-        PdfWriter.getInstance(document, new FileOutputStream("C:\\Users\\gabriel-duranti\\Desktop\\pont.pdf"));
-        document.open();
-
-        Image img = PngImage.getImage(destPath);
-        img.scaleToFit(800, 520);
-
-        document.add(img);
-
-        document.close();
+    private static void logArgs(String sourceImagePath, String targetPdfPath, String originalColor, String newColor) {
+        LOGGER.info("Iniciando...");
+        LOGGER.info("sourceImagePath.: " + sourceImagePath);
+        LOGGER.info("targetPdfPath...: " + targetPdfPath);
+        LOGGER.info("originalColor...: " + originalColor);
+        LOGGER.info("newColor........: " + newColor);
     }
 
 }
